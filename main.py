@@ -1,5 +1,6 @@
 import cv2 as cv
 import numpy as np
+import functions as f
 
 ## SHOW VIDEO
 vid = cv.VideoCapture("Sources/little_movement.mp4")
@@ -15,6 +16,8 @@ while True:
 
     if cv.waitKey(1) == ord('q'):
         break
+
+
 
 #release camera
 vid.release()
