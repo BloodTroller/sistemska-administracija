@@ -74,7 +74,7 @@ def polepsaj_tocke():
 
 
 ## SHOW VIDEO
-vid = cv.VideoCapture("Sources/little_movement.mp4")
+vid = cv.VideoCapture(0)
 cv.namedWindow("cam_frame")
 cv.setMouseCallback("cam_frame", tocke_slike)
 # ms between frames info; https://fpstoms.com
