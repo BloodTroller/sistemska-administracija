@@ -1,34 +1,6 @@
 import cv2
 import numpy as np
 
-
-# def doloci_barvo_koze(slika, levo_zgoraj, desno_spodaj):
-#     x1, y1 = levo_zgoraj
-#     x2, y2 = desno_spodaj
-#     izbira = slika[y1:y2, x1:x2]
-#     b = np.mean(izbira[:, :, 0])
-#     g = np.mean(izbira[:, :, 1])
-#     r = np.mean(izbira[:, :, 2])
-#     avg = [b, g, r]
-#     #
-#     # min_bgr = [255, 255, 255]  # Initialize with maximum possible intensity
-#     # max_bgr = [0, 0, 0]  # Initialize with minimum possible intensity
-#     #
-#     # for y in range(levo_zgoraj[0], desno_spodaj[0] + 1):
-#     #     for x in range(levo_zgoraj[1], desno_spodaj[1] + 1):
-#     #         pixel_bgr = slika[y, x]
-#     #
-#     #         # Update the darkest color
-#     #         if np.mean(pixel_bgr) < np.mean(min_bgr):
-#     #             min_bgr = pixel_bgr
-#     #
-#     #         # Update the lightest color
-#     #         if np.mean(pixel_bgr) > np.mean(max_bgr):
-#     #             max_bgr = pixel_bgr
-#     #
-#     # return tuple(np.ndarray(min_bgr)), tuple(np.ndarray(max_bgr))
-#     return avg
-
 def doloci_barvo_koze(slika, levo_zgoraj, desno_spodaj):
 
     roi = slika[levo_zgoraj[1]:desno_spodaj[1], levo_zgoraj[0]:desno_spodaj[0]]
