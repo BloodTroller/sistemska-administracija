@@ -31,7 +31,7 @@ import numpy as np
 
 def doloci_barvo_koze(slika, levo_zgoraj, desno_spodaj):
 
-    roi = slika[levo_zgoraj[0]:desno_spodaj[0], levo_zgoraj[1]:desno_spodaj[1]]
+    roi = slika[levo_zgoraj[1]:desno_spodaj[1], levo_zgoraj[0]:desno_spodaj[0]]
 
     gray_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
 
@@ -50,8 +50,24 @@ def zmanjsaj_sliko(slika, sirina, visina):
 
 
 def obdelaj_sliko_s_skatlami(slika, sirina_skatle, visina_skatle, barva_koze):
+    visina, sirina = slika.shape[:2]
 
-    pass
+    korak_x = sirina_skatle
+    korak_y = visina_skatle
+
+    boxes = []
+
+    for y in range(0, visina - visina_skatle, korak_y):
+        for x in range(0, sirina - sirina_skatle, korak_x):
+
+            skatla = slika[y:y + visina_skatle, x:x + sirina_skatle]
+
+            piksli_koze = prestej_piksle_z_barvo_koze(skatla, barva_koze)
+
+            # če je 50%+ kože
+            if piksli_koze / (sirina_skatle * visina_skatle) > 0.5:
+                boxes.append((x, y, x + sirina_skatle, y + visina_skatle))
+    return boxes
 
 def prestej_piksle_z_barvo_koze(slika, barva_koze):
     brown_min = barva_koze[0]

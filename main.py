@@ -119,8 +119,8 @@ while play and cv.getWindowProperty("cam_frame", cv.WND_PROP_VISIBLE) >= 1:
             break
 
     if check:
-        print(f.prestej_piksle_z_barvo_koze(frame, barva_koze))
-        print(f.obdelaj_sliko_s_skatlami(frame, 33, 33, barva_koze))
+        # print(f.prestej_piksle_z_barvo_koze(frame, barva_koze))
+        print(f.obdelaj_sliko_s_skatlami(frame, 10, 10, barva_koze))
 
 # release camera
 vid.release()
