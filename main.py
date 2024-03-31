@@ -1,4 +1,3 @@
-import cv2
 import cv2 as cv
 import numpy as np
 import functions as f
@@ -10,14 +9,15 @@ def tocke_slike(event, x, y, flags, params):
         pframe = frame.copy()
         if len(cord) == 2:
             cord.clear()
+            displaystring = "Camera (press S to confirm selection - 2 corners)"
             cv.setWindowTitle("cam_frame", "Camera (press S to confirm selection - 2 corners)")
+            print(displaystring)
         else:
             if len(cord) == 0:
                 cord.append([x, y])
-                cv.setWindowTitle("cam_frame",
-                                  "Camera (press S to confirm selection - 2 corners [(" + str(cord[0][0]) + "," + str(
-                                      cord[0][1]) + "), Y ])")
-
+                displaystring = "Camera (press S to confirm selection - 2 corners [(" + str(cord[0][0]) + "," + str(cord[0][1]) + "), Y ])"
+                cv.setWindowTitle("cam_frame", displaystring)
+                print(displaystring)
             if cord[0] != [x, y] and len(cord) == 1:
                 cord.append([x, y])
                 polepsaj_tocke()
@@ -33,7 +33,9 @@ def tocke_slike(event, x, y, flags, params):
                     pframe[ind, a1] = [255 - frame[ind, a1, 0], 255 - frame[ind, a1, 1], 255 - frame[ind, a1, 2]]
                     pframe[ind, a2] = [255 - frame[ind, a2, 0], 255 - frame[ind, a2, 1], 255 - frame[ind, a2, 2]]
 
-                cv.setWindowTitle("cam_frame", "Camera (press S to confirm selection - 2 corners [(" + str(cord[0][0]) + "," + str(cord[0][1]) + "), (" + str(cord[1][0]) + "," + str(cord[1][1]) + ")])")
+                displaystring = "Camera (press S to confirm selection - 2 corners [(" + str(cord[0][0]) + "," + str(cord[0][1]) + "), (" + str(cord[1][0]) + "," + str(cord[1][1]) + ")])"
+                cv.setWindowTitle("cam_frame", displaystring)
+                print(displaystring)
 
         for i in cord:
             xx, yy = i
@@ -80,14 +82,15 @@ frameTime = 40
 waitForSelection = True
 play = True
 cord = []
-barva_koze = -1
-global frame, pframe
+cv.setWindowTitle("cam_frame", "Camera (press Q to close)")
+print("Camera (press Q to close)")
 
 while play and cv.getWindowProperty("cam_frame", cv.WND_PROP_VISIBLE) >= 1:
     check, frame = vid.read()
     if check:
+        # VELIKOST SLIKE
+        frame = f.zmanjsaj_sliko(frame, 220, 340)
         cv.imshow("cam_frame", frame)
-        cv.setWindowTitle("cam_frame", "Camera (press Q to close)")
     else:
         print("Video ended")
         play = False
@@ -100,16 +103,24 @@ while play and cv.getWindowProperty("cam_frame", cv.WND_PROP_VISIBLE) >= 1:
     while waitForSelection:
         pframe = frame.copy()
         cv.setWindowTitle("cam_frame", "Camera (press ENTER to confirm selection - 2 corners)")
+        print("Camera (press ENTER to confirm selection - 2 corners)")
         k = cv.waitKey(-1)
         if k == ord(chr(13)) and len(cord) == 2:
             waitForSelection = False
             cv.setMouseCallback("cam_frame", lambda *args: None)
-            barva_koze = f.doloci_barvo_koze(frame, tuple(cord[0]), tuple(cord[1]))
-            print(barva_koze)
+            barva_koze_min, barva_koze_max = f.doloci_barvo_koze(frame, cord[0], cord[1])
+            print("Min: " + str(barva_koze_min) + " Max: " + str(barva_koze_max))
+            barva_koze = np.array([barva_koze_min, barva_koze_max])
         if k == ord('q') or cv.getWindowProperty("cam_frame", cv.WND_PROP_VISIBLE) < 1:
             play = False
             waitForSelection = False
+            cv.setWindowTitle("cam_frame", "Camera (press Q to close)")
+            print("Camera (press Q to close)")
             break
+
+    if check:
+        print(f.prestej_piksle_z_barvo_koze(frame, barva_koze))
+        print(f.obdelaj_sliko_s_skatlami(frame, 33, 33, barva_koze))
 
 # release camera
 vid.release()
