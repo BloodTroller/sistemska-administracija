@@ -3,34 +3,37 @@ import cv2 as cv
 import numpy as np
 import functions as f
 
+
 def tocke_slike(event, x, y, flags, params):
     global pframe
     if event == cv.EVENT_LBUTTONUP:
-        if len(cord) == 0:
-            cord.append([x, y])
-            cv.setWindowTitle("cam_frame",
-                              "Camera (press S to confirm selection - 2 corners [(" + str(cord[0][0]) + "," + str(
-                                  cord[0][1]) + "), Y ])")
-        elif cord[0] != [x, y]:
-            cord.append([x, y])
-            cv.setWindowTitle("cam_frame",
-                              "Camera (press S to confirm selection - 2 corners [(" + str(cord[0][0]) + "," + str(
-                                  cord[0][1]) + "), (" + str(cord[1][0]) + "," + str(cord[1][1]) + ")])")
-            polepsaj_tocke()
-            a1, b1 = cord[0]
-            a2, b2 = cord[1]
-            for index in range(a1, a2):
-                pframe[b1, index] = [255 - frame[b1, index, 0], 255 - frame[b1, index, 1], 255 - frame[b1, index, 2]]
-                pframe[b2, index] = [255 - frame[b2, index, 0], 255 - frame[b2, index, 1], 255 - frame[b2, index, 2]]
-
-            for ind in range(b1, b2):
-                pframe[ind, a1] = [255 - frame[ind, a1, 0], 255 - frame[ind, a1, 1], 255 - frame[ind, a1, 2]]
-                pframe[ind, a2] = [255 - frame[ind, a2, 0], 255 - frame[ind, a2, 1], 255 - frame[ind, a2, 2]]
-
-        if len(cord) > 2:
+        pframe = frame.copy()
+        if len(cord) == 2:
             cord.clear()
-            pframe = frame.copy()
             cv.setWindowTitle("cam_frame", "Camera (press S to confirm selection - 2 corners)")
+        else:
+            if len(cord) == 0:
+                cord.append([x, y])
+                cv.setWindowTitle("cam_frame",
+                                  "Camera (press S to confirm selection - 2 corners [(" + str(cord[0][0]) + "," + str(
+                                      cord[0][1]) + "), Y ])")
+
+            if cord[0] != [x, y] and len(cord) == 1:
+                cord.append([x, y])
+                polepsaj_tocke()
+
+            if len(cord) == 2:
+                a1, b1 = cord[0]
+                a2, b2 = cord[1]
+                for index in range(a1, a2):
+                    pframe[b1, index] = [255 - frame[b1, index, 0], 255 - frame[b1, index, 1], 255 - frame[b1, index, 2]]
+                    pframe[b2, index] = [255 - frame[b2, index, 0], 255 - frame[b2, index, 1], 255 - frame[b2, index, 2]]
+
+                for ind in range(b1, b2):
+                    pframe[ind, a1] = [255 - frame[ind, a1, 0], 255 - frame[ind, a1, 1], 255 - frame[ind, a1, 2]]
+                    pframe[ind, a2] = [255 - frame[ind, a2, 0], 255 - frame[ind, a2, 1], 255 - frame[ind, a2, 2]]
+
+                cv.setWindowTitle("cam_frame", "Camera (press S to confirm selection - 2 corners [(" + str(cord[0][0]) + "," + str(cord[0][1]) + "), (" + str(cord[1][0]) + "," + str(cord[1][1]) + ")])")
 
         for i in cord:
             xx, yy = i
