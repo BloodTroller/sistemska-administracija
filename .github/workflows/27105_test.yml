@@ -19,7 +19,7 @@ jobs:
       
   test:
     runs-on: 
-      - ubuntu-latest
+      - self-hosted
       - X64
       - Linux
     
