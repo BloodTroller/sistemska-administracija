@@ -1,3 +1,4 @@
+# Comment
 on: push
 jobs:
   first-job:
@@ -6,4 +7,9 @@ jobs:
       - X64
       - Linux
     steps:
-      - run: echo Testing syntax
+      - run: |
+            echo Running 27105_test.yml
+            sleep 1
+            echo .
+            sleep 1
+            echo .
