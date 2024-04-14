@@ -26,7 +26,7 @@ jobs:
           if [ ! -d ".errors" ]; then
            mkdir -p .errors
           fi
-          if [ ! -f "tests/functions_test.py" ]; then
+          if [ ! -f "functions_test.py" ]; then
             echo "Error: functions_test.py does not exist" > .errors/test_errors.txt
             exit 1
           fi
