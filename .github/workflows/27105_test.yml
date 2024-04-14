@@ -26,10 +26,10 @@ jobs:
         run: |
           if [ ! -d "./errors" ]; then
             echo "Errors directory does not exist. Creating it..."
-            mkdir ./errors
+            mkdir .errors
           fi
           if [ ! -f .errors/napake.txt ]; then
-            touch .errors/napake.txt
+            touch napake.txt
           fi
           if [ ! -f "functions_test.py" ]; then
             echo "error: functions_test.py does not exist" > .errors/napake.txt
