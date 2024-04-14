@@ -70,6 +70,7 @@ jobs:
           pip install numpy>=1.26.4
           pip install opencv-python>=4.9.0
           pip install numpy>=1.26.4
+          pip install docker>=7.0.0
 
       - name: Run tests
         run: pytest
