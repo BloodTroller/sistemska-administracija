@@ -19,23 +19,22 @@ jobs:
 
       - name: Check files
         run: |
+          mkdir .errors
           if [ ! -d "./errors" ]; then
-            echo "Errors directory does not exist. Creating it..."
-            mkdir .errors
+            echo "Errors directory could not be created."
           fi
-          if [ ! -f .errors/napake.txt ]; then
-            touch napake.txt
-          fi
+          touch .errors/napake.txt
+          
           if [ ! -f "functions_test.py" ]; then
             echo "error: functions_test.py does not exist" > .errors/napake.txt
           exit 1
           fi
 
-#      - name: Set artifacts
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: napake
-#          path: ./errors/napake.txt
+      - name: Set artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: napake
+          path: .errors/napake.txt
   testing:
     runs-on:
       - self-hosted
@@ -44,17 +43,16 @@ jobs:
     needs: check_tests
     if: ${{ needs.check_tests.result == 'success' }}
     steps:
-#      - name: Get artifacts
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: napake
-#          path: ./errors/napake.txt
+      - name: Get artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: napake
 
-#      - name: Check artifact errors
-#        run: |
-#          if grep -q "error" ./errors/downloaded_napake.txt; then
-#            exit 1
-#          fi
+      - name: Check artifact errors
+        run: |
+          if grep -q "error" .errors/napake.txt; then
+            exit 1
+          fi
 
       - name: Setup
         uses: actions/setup-python@v2

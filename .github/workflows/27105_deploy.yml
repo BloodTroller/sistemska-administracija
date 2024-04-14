@@ -1,13 +1,13 @@
 
 name: Docker
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows:
+      - CodeTester
+    types: [completed]
 
 jobs:
-  docker:
-    needs: CodeTester.outputs.successful
+  dock:
     runs-on:
       - self-hosted
     steps:
@@ -21,10 +21,12 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build
+        if: success()
         run: |
-            docker build -t bloodtroller/sistemska-administracija:latest .
+          docker build -t bloodtroller/sistemska-administracija:latest .
 
       - name: Push
+        if: success()
         run: |
           docker push bloodtroller/sistemska-administracija:latest
 
