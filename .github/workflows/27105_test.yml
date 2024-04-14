@@ -11,18 +11,9 @@ on:
       - main
       - detection-develop
 jobs:
-  start_run:
-    runs-on:
-      - self-hosted
-    steps:
-      - run: echo "running 27105_test.yml"
-      
-  testing:
+  check_tests:
     runs-on: 
       - self-hosted
-      - X64
-      - Linux
-    
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -30,6 +21,25 @@ jobs:
       - name: Print checkout confirmation
         run: "echo Repository: $GITHUB_WORKSPACE"
         
+      - name: Check files
+        run: |
+           if [ ! -d ".errors" ]; then
+            mkdir -p .errors
+           fi
+           if [ ! -d "tests" ] || [ -z "$(ls -A tests)" ]; then
+              # Redirect error message to a file within the ".errors" folder
+              echo "Error: Tests not found" > .errors/test_errors.txt
+              exit 1
+           fi
+           
+  testing:
+    runs-on: 
+      - self-hosted
+      - X64
+      - Linux
+    needs: check_tests
+    if: ${{ job.status == 'success' && needs.check_tests.result == 'success' }}
+    steps:
       - name: Setup
         uses: actions/setup-python@v2
         with:
@@ -43,33 +53,7 @@ jobs:
       - name: Installations
         run: |
           pip install pytest>=8.1.1
-          pip install requests==2.31.0
           pip install numpy>=1.26.4
-        continue-on-error: true
-
-      - name: Check tests
-        run: |
-           if [ ! -d ".errors" ]; then
-            mkdir -p .errors
-           fi
-           if [ ! -d "tests" ] || [ -z "$(ls -A tests)" ]; then
-              # Redirect error message to a file within the ".errors" folder
-              echo "Error: Tests not found" > .errors/test_errors.txt
-              exit 1
-           fi
-        continue-on-error: true
-        
-      # - name: Pre-tests
-      #   run: |
-          
-      #   continue-on-error: true
-
+  
       - name: Run test
         run: pytest
-        
-      - name: Show error
-        if: ${{ always() }}
-        run: |
-          if [ -f "test_error.txt" ]; then
-            cat test_errors.txt
-          fi
