@@ -53,7 +53,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: napake
-          path: ./errors/downloaded_napake.txt
+          path: ./errors/napake.txt
 
       - name: Check artifact errors
         run: |
