@@ -10,7 +10,6 @@ jobs:
   dock:
     runs-on:
       - self-hosted
-      -
     steps:
       - name: Repo
         uses: actions/checkout@v4
