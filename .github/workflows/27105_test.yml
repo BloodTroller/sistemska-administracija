@@ -24,6 +24,7 @@ jobs:
       - name: Check files
         run: |
           if [ ! -f "functions_test.py" ]; then
+#            echo "Error: functions_test.py does not exist" > .errors/napake.txt
             exit 1
           fi
 
@@ -31,26 +32,27 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: napake
-          path: ./errors
+          path: ./errors/napake.txt
   testing:
     runs-on:
       - self-hosted
       - X64
       - Linux
     needs: check_tests
-    #    if: ${{ needs.check_tests.result == 'success' }}
+#    if: ${{ needs.check_tests.result == 'success' }}
     steps:
       - name: Get artifacts
         uses: actions/download-artifact@v2
         with:
           name: napake
-          path: ./errors
+          path: ./errors/downloaded_napake.txt
 
       - name: Check artifact errors
         run: |
-          if grep -q "ERROR_CODE" ./deployed-artifacts/error-codes.txt; then
+          if grep -q "error" ./errors/downloaded_napake.txt; then
             exit 1
           fi
+
       - name: Setup
         uses: actions/setup-python@v2
         with:
