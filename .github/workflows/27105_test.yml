@@ -1,0 +1,10 @@
+on: push
+jobs:
+  first-job:
+    runs-on:
+      - self-hosted
+      - X64
+      - Linux
+    steps:
+      - run: node --version
+      - run: echo Testing syntax
