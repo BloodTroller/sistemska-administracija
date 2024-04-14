@@ -20,13 +20,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build
+      - name: Build and push
         if: success()
-        run: |
-          docker build -t bloodtroller/sistemska-administracija:latest .
-
-      - name: Push
-        if: success()
-        run: |
-          docker push bloodtroller/sistemska-administracija:latest
-
+        run: sh zapakiraj_27105.sh
