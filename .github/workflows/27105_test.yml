@@ -12,7 +12,7 @@ on:
       - detection-develop
 jobs:
   check_tests:
-    runs-on: 
+    runs-on:
       - self-hosted
     steps:
       - name: Checkout Repo
@@ -20,30 +20,18 @@ jobs:
 
       - name: Print checkout confirmation
         run: "echo Repository: $GITHUB_WORKSPACE"
-        
+
       - name: Check files
         run: |
-            if [ ! -d ".errors" ]; then
-              mkdir -p .errors
-            fi
-            if [ ! -d "tests" ] || [ -z "$(ls -A tests)" ]; then
-              # Redirect error message to a file within the ".errors" folder
-              echo "Error: Tests not found" > .errors/test_errors.txt
-              exit 1
-            fi
-            if ! ls tests/*.py >/dev/null 2>&1; then
-              # Redirect error message to a file within the ".errors" folder
-              echo "Error: No Python files found in tests folder" > .errors/test_errors.txt
-              exit 1
-            fi
-      - name: Check functions test
-        run: |
-             if [ ! -f "tests/functions_test.py" ]; then
-               echo "Error: functions_test.py does not exist" > .errors/test_errors.txt
-               exit 1
-             fi
+          if [ ! -d ".errors" ]; then
+           mkdir -p .errors
+          fi
+          if [ ! -f "tests/functions_test.py" ]; then
+            echo "Error: functions_test.py does not exist" > .errors/test_errors.txt
+            exit 1
+          fi
   testing:
-    runs-on: 
+    runs-on:
       - self-hosted
       - X64
       - Linux
@@ -66,6 +54,6 @@ jobs:
           pip install numpy>=1.26.4
           pip install opencv-python>=4.9.0
           pip install numpy>=1.26.4
-  
+
       - name: Run tests
         run: pytest
