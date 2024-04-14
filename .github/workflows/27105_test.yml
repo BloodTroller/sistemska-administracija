@@ -9,9 +9,12 @@ jobs:
   check_tests:
     runs-on:
       - self-hosted
+    strategy:
+      matrix:
+        pip-version: [latest,24.0]
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Print checkout confirmation
         run: |
@@ -31,7 +34,7 @@ jobs:
           fi
 
       - name: Set artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: napake
           path: .errors/napake.txt
@@ -44,7 +47,7 @@ jobs:
     if: ${{ needs.check_tests.result == 'success' }}
     steps:
       - name: Get artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: napake
 
@@ -55,11 +58,11 @@ jobs:
           fi
 
       - name: Setup
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           architecture: 'x64'
-          pip-version: 'latest'
+          pip-version: ${{ matrix.pip-version }}
 
       - name: Get pip with python
         run: "python -m ensurepip --upgrade --user"
