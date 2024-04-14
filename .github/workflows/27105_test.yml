@@ -1,15 +1,71 @@
 # Comment
-on: push
+name: Code Tester
+
+on:
+  push:
+    branches:
+      - main
+      - detection-develop
+  pull_request:
+    branches:
+      - main
+      - detection-develop
 jobs:
-  first-job:
+  run:
     runs-on:
       - self-hosted
+    steps:
+      - run: echo "running 27105_test.yml"
+      
+  test:
+    runs-on: 
+      - ubuntu-latest
       - X64
       - Linux
+    
     steps:
-      - run: |
-            echo Running 27105_test.yml
-            sleep 1
-            echo .
-            sleep 1
-            echo .
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Print checkout confirmation
+        run: "echo Repository: $GITHUB_WORKSPACE"
+        
+      - name: Setup
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+          architecture: 'x64'
+          pip-version: 'latest'
+
+      - name: Get pip with python
+        run: "python -m ensurepip --upgrade --user"
+
+      - name: Installations
+        run: |
+          pip install pytest>=8.1.1
+          pip install requests==2.31.0
+          pip install numpy>=1.26.4
+        continue-on-error: true
+
+      - name: Check tests
+        run: |
+         if [ ! -d "tests" ] || [ -z "$(ls -A tests)" ]; then
+            echo "Error: Tests not found" > test_errors.txt
+            exit 1
+          fi
+        continue-on-error: true
+        
+      # - name: Pre-tests
+      #   run: |
+          
+      #   continue-on-error: true
+
+      - name: Run test
+        run: pytest
+        
+      - name: Show error
+        if: ${{ always() }}
+        run: |
+          if [ -f "test_error.txt" ]; then
+            cat test_errors.txt
+          fi
