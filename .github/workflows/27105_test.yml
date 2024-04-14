@@ -6,5 +6,4 @@ jobs:
       - X64
       - Linux
     steps:
-      - run: node --version
       - run: echo Testing syntax
