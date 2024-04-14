@@ -64,6 +64,8 @@ jobs:
         run: |
           pip install pytest>=8.1.1
           pip install numpy>=1.26.4
+          pip install opencv-python>=4.9.0
+          pip install numpy>=1.26.4
   
       - name: Run tests
         run: pytest
