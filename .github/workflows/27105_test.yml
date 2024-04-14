@@ -11,13 +11,13 @@ on:
       - main
       - detection-develop
 jobs:
-  run:
+  start_run:
     runs-on:
       - self-hosted
     steps:
       - run: echo "running 27105_test.yml"
       
-  test:
+  testing:
     runs-on: 
       - self-hosted
       - X64
@@ -49,10 +49,14 @@ jobs:
 
       - name: Check tests
         run: |
-         if [ ! -d "tests" ] || [ -z "$(ls -A tests)" ]; then
-            echo "Error: Tests not found" > test_errors.txt
-            exit 1
-          fi
+           if [ ! -d ".errors" ]; then
+            mkdir -p .errors
+           fi
+           if [ ! -d "tests" ] || [ -z "$(ls -A tests)" ]; then
+              # Redirect error message to a file within the ".errors" folder
+              echo "Error: Tests not found" > .errors/test_errors.txt
+              exit 1
+           fi
         continue-on-error: true
         
       # - name: Pre-tests
