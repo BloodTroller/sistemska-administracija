@@ -10,6 +10,10 @@ jobs:
   dock:
     runs-on:
       - self-hosted
+    services:
+      docker:
+        image: docker:latest
+        options: --privileged
     steps:
       - name: Repo
         uses: actions/checkout@v2
