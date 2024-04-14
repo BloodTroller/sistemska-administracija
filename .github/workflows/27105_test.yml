@@ -5,11 +5,6 @@ on:
   push:
     branches:
       - main
-      - detection-develop
-  pull_request:
-    branches:
-      - main
-      - detection-develop
 jobs:
   check_tests:
     runs-on:
@@ -36,30 +31,30 @@ jobs:
           exit 1
           fi
 
-      - name: Set artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: napake
-          path: ./errors/napake.txt
+#      - name: Set artifacts
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: napake
+#          path: ./errors/napake.txt
   testing:
     runs-on:
       - self-hosted
       - X64
       - Linux
     needs: check_tests
-    #    if: ${{ needs.check_tests.result == 'success' }}
+    if: ${{ needs.check_tests.result == 'success' }}
     steps:
-      - name: Get artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: napake
-          path: ./errors/napake.txt
+#      - name: Get artifacts
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: napake
+#          path: ./errors/napake.txt
 
-      - name: Check artifact errors
-        run: |
-          if grep -q "error" ./errors/downloaded_napake.txt; then
-            exit 1
-          fi
+#      - name: Check artifact errors
+#        run: |
+#          if grep -q "error" ./errors/downloaded_napake.txt; then
+#            exit 1
+#          fi
 
       - name: Setup
         uses: actions/setup-python@v2
