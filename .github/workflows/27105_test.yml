@@ -38,7 +38,7 @@ jobs:
       - X64
       - Linux
     needs: check_tests
-    if: ${{ job.status == 'success' && needs.check_tests.result == 'success' }}
+    if: ${{ needs.check_tests.result == 'success' }}
     steps:
       - name: Setup
         uses: actions/setup-python@v2
