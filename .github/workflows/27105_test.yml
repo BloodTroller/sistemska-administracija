@@ -1,5 +1,5 @@
 # Comment
-name: Code Tester
+name: CodeTester
 
 on:
   push:
@@ -75,3 +75,6 @@ jobs:
 
       - name: Run tests
         run: pytest
+
+      - name: Output
+        run: echo "successful"
