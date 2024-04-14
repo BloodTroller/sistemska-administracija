@@ -9,9 +9,6 @@ jobs:
   check_tests:
     runs-on:
       - self-hosted
-    strategy:
-      matrix:
-        pip-version: [ latest,24.0 ]
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -43,9 +40,23 @@ jobs:
       - self-hosted
       - X64
       - Linux
+    strategy:
+      matrix:
+        pip-version: [ latest,24.0 ]
     needs: check_tests
     if: ${{ needs.check_tests.result == 'success' }}
     steps:
+      - name: Get artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: napake
+
+      - name: Check artifact errors
+        run: |
+          if grep -q "error" .errors/napake.txt; then
+            exit 1
+          fi
+
       - name: Setup
         uses: actions/setup-python@v5
         with:
@@ -59,17 +70,6 @@ jobs:
       - name: Other installations
         run: |
           pip install -r req.txt
-
-      - name: Get artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: napake
-
-      - name: Check artifact errors
-        run: |
-          if grep -q "error" .errors/napake.txt; then
-            exit 1
-          fi
 
       - name: Run tests
         run: pytest
