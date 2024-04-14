@@ -19,13 +19,13 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Print checkout confirmation
-        run: "echo Repository: $GITHUB_WORKSPACE"
+        run: |
+          echo Repository: $GITHUB_WORKSPACE
 
       - name: Check files
         run: |
           if [ ! -f "functions_test.py" ]; then
-#            echo "Error: functions_test.py does not exist" > .errors/napake.txt
-            exit 1
+          exit 1
           fi
 
       - name: Set artifacts
@@ -39,7 +39,7 @@ jobs:
       - X64
       - Linux
     needs: check_tests
-#    if: ${{ needs.check_tests.result == 'success' }}
+    #    if: ${{ needs.check_tests.result == 'success' }}
     steps:
       - name: Get artifacts
         uses: actions/download-artifact@v2
