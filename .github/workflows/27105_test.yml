@@ -24,7 +24,15 @@ jobs:
 
       - name: Check files
         run: |
+          if [ ! -d "./errors" ]; then
+            echo "Errors directory does not exist. Creating it..."
+            mkdir ./errors
+          fi
+          if [ ! -f .errors/napake.txt ]; then
+            touch .errors/napake.txt
+          fi
           if [ ! -f "functions_test.py" ]; then
+            echo "error: functions_test.py does not exist" > .errors/napake.txt
           exit 1
           fi
 
