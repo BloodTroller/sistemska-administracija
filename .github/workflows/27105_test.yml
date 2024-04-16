@@ -70,9 +70,6 @@ jobs:
       - name: Other installations
         run: |
           pip install -r req.txt
-          pip uninstall opencv-python-headless
-          pip uninstall opencv-contrib-python-headless
-          pip install opencv-contrib-python-headless
 
       - name: Run tests
         run: pytest
