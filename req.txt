@@ -1,6 +1,6 @@
 pytest>=8.1.1
 numpy>=1.26.4
-opencv-python>=4.9.0
+opencv-python-headless
 numpy>=1.26.4
 docker>=7.0.0
-opencv-contrib-python
+opencv-contrib-python-headless
