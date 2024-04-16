@@ -4,4 +4,4 @@ LABEL by="bloodtroller"
 WORKDIR /code
 COPY . .
 RUN pip install -r req.txt
-CMD ["python", "main.py"]
+CMD ["python3", "main.py"]
