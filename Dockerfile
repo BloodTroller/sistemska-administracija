@@ -1,4 +1,4 @@
-FROM python:4.9.0
+FROM python:3.12
 LABEL school_subject=["sistemska-administracija","racunalniski-vid"]
 LABEL by="bloodtroller"
 WORKDIR /code
